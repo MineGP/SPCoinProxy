@@ -1,7 +1,6 @@
-﻿namespace SPCoinProxy.Services
+﻿namespace SPCoinProxy.Services;
+
+public interface IProxyContext
 {
-    public interface IProxyContext
-    {
-        (string url, string token) GetContext();
-    }
+    (string url, string token) GetContext();
 }

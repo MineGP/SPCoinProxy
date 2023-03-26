@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPCoinTest.Packets
-{
-    public class ConfirmResponsePacket : AbstractPacket
-    {
-        public override PacketType PacketType => PacketType.ServerConfirm;
+namespace SPCoinTest.Packets;
 
-        public ConfirmResponsePacket(long id, JObject json) : base(id, json) { }
-    }
+public class ConfirmResponsePacket : AbstractPacket
+{
+    public override PacketType PacketType => PacketType.ServerConfirm;
+
+    public ConfirmResponsePacket(long id, JObject json) : base(id, json) { }
 }

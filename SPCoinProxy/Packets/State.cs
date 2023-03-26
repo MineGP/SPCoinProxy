@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPCoinTest.Packets
+namespace SPCoinTest.Packets;
+
+public enum State
 {
-    public enum State
-    {
-        PRELOGIN,
-        CONNECTED
-    }
+    PRELOGIN,
+    CONNECTED
 }
