@@ -1,0 +1,43 @@
+name: deploy
+
+on: 
+  push:
+    branches: [ "master" ]
+
+jobs:
+  run_test_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./SPCoinProxy/SPCoinProxy.csproj
+    - name: Build
+      run: dotnet build --no-restore ./SPCoinProxy/SPCoinProxy.csproj
+    - name: Test
+      run: dotnet test --no-build --verbosity normal ./SPCoinProxy/SPCoinProxy.csproj
+      
+      
+  build_and_pub:
+    needs: [run_test_build]
+    
+    runs-on: ubuntu-latest
+    
+    env:
+      LOGIN: ${{ secrets.DOCKER_LOGIN }}
+      NAME: ${{ secrets.DOCKER_NAME }}
+      
+    steps:
+    - name: Login to docker.io
+      run:  echo ${{ secrets.DOCKER_PWD }} | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+    - uses: actions/checkout@master
+    - name: Build image
+      run:  docker build -t $LOGIN/$NAME -f ./SPCoinProxy/Dockerfile .
+    - name: Push image to docker.io
+      run: docker push $LOGIN/$NAME
+    - name: Send webhook for deploy
+      run: "curl -X POST ${{ secrets.DEPLOYMENT_SERVER }} --header \"Authorization: ${{ secrets.DEPLOYMENT_TOKEN }}\""
