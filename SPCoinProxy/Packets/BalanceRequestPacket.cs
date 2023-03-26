@@ -10,8 +10,18 @@ namespace SPCoinTest.Packets;
 public class BalanceRequestPacket : AbstractPacket
 {
     public readonly Guid uuid;
-    public override PacketType PacketType => PacketType.ClientBalance;
+    public override PacketType PacketType
+    {
+        get { return PacketType.ClientBalance; }
+    }
 
-    public BalanceRequestPacket(Guid uuid) : base(DateTime.Now.Millisecond & 0xfffffff) => this.uuid = uuid;
-    protected override JToken? ToJsonData() => uuid.ToString("N");
+    public BalanceRequestPacket(Guid uuid) : base(DateTime.Now.Millisecond & 0xfffffff)
+    {
+        this.uuid = uuid;
+    }
+
+    protected override JToken? ToJsonData()
+    {
+        return uuid.ToString("N");
+    }
 }

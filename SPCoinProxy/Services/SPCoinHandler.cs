@@ -5,83 +5,101 @@ using System.Text;
 
 namespace SPCoinProxy.Services;
 
-public class SPCoinHandler : ISPCoinHandler
+public class SpCoinHandler : ISPCoinHandler
 {
     private readonly string url;
     private readonly string token;
-    public SPCoinHandler(IProxyContext context)
-        => (url, token) = context.GetContext();
+    public SpCoinHandler(IProxyContext context)
+    {
+        (url, token) = context.GetContext();
+    }
 
-    public Task<int> GetUserBalance(Guid uuid, CancellationToken cancellationToken) => RunClient(async s =>
+    public Task<int> GetUserBalance(Guid uuid, CancellationToken cancellationToken)
     {
-        var request = new BalanceRequestPacket(uuid);
-        await s.WriteAsync(request);
-        var response = await s.ReadAsync<BalanceResponsePacket>();
-        return response.balance;
-    }, cancellationToken);
-    public Task<bool> IncreaseUserBalance(Guid uuid, string reason, int value, CancellationToken cancellationToken) => RunClient(async s =>
-    {
-        if (value <= 0) return false;
-        var request = new BalanceSetupRequestPacket(uuid, reason, value);
-        await s.WriteAsync(request);
-        try
+        return RunClient(async s =>
         {
-            await s.ReadAsync<ConfirmResponsePacket>().WaitAsync(TimeSpan.FromSeconds(3));
-            return true;
-        }
-        catch (TimeoutException)
-        {
-            return false;
-        }
-    }, cancellationToken);
-    public Task<bool> DecreaseUserBalance(Guid uuid, string reason, int value, CancellationToken cancellationToken) => RunClient(async s =>
-    {
-        if (value <= 0) return false;
-        var request = new BalanceSetupRequestPacket(uuid, reason, -value);
-        await s.WriteAsync(request);
-        try
-        {
-            await s.ReadAsync<ConfirmResponsePacket>().WaitAsync(TimeSpan.FromSeconds(3));
-            return true;
-        }
-        catch (TimeoutException)
-        {
-            return false;
-        }
-    }, cancellationToken);
+            var request = new BalanceRequestPacket(uuid);
+            await s.WriteAsync(request);
+            var response = await s.ReadAsync<BalanceResponsePacket>();
+            return response.balance;
+        }, cancellationToken);
+    }
 
-    private async Task RunClient(Func<SPCoinSocket, Task> task, CancellationToken cancellationToken)
+    public Task<bool> IncreaseUserBalance(Guid uuid, string reason, int value, CancellationToken cancellationToken)
     {
-        using var socket = new SPCoinSocket(url, cancellationToken);
+        return RunClient(async s =>
+        {
+            if (value <= 0) return false;
+            var request = new BalanceSetupRequestPacket(uuid, reason, value);
+            await s.WriteAsync(request);
+            try
+            {
+                await s.ReadAsync<ConfirmResponsePacket>().WaitAsync(TimeSpan.FromSeconds(3));
+                return true;
+            }
+            catch (TimeoutException)
+            {
+                return false;
+            }
+        }, cancellationToken);
+    }
+
+    public Task<bool> DecreaseUserBalance(Guid uuid, string reason, int value, CancellationToken cancellationToken)
+    {
+        return RunClient(async s =>
+        {
+            if (value <= 0) return false;
+            var request = new BalanceSetupRequestPacket(uuid, reason, -value);
+            await s.WriteAsync(request);
+            try
+            {
+                await s.ReadAsync<ConfirmResponsePacket>().WaitAsync(TimeSpan.FromSeconds(3), cancellationToken);
+                return true;
+            }
+            catch (TimeoutException)
+            {
+                return false;
+            }
+        }, cancellationToken);
+    }
+
+    private async Task RunClient(Func<SpCoinSocket, Task> task, CancellationToken cancellationToken)
+    {
+        using var socket = new SpCoinSocket(url, cancellationToken);
         await socket.ConnectAsync();
         await socket.WriteAsync(new LoginRequestPacket(token));
         await task.Invoke(socket);
     }
-    private async Task<T> RunClient<T>(Func<SPCoinSocket, Task<T>> task, CancellationToken cancellationToken)
+    private async Task<T> RunClient<T>(Func<SpCoinSocket, Task<T>> task, CancellationToken cancellationToken)
     {
-        using var socket = new SPCoinSocket(url, cancellationToken);
+        using var socket = new SpCoinSocket(url, cancellationToken);
         await socket.ConnectAsync();
         await socket.WriteAsync(new LoginRequestPacket(token));
         return await task.Invoke(socket);
     }
 
-    private class SPCoinSocket : IDisposable
+    public class SpCoinSocket : IDisposable
     {
-        private readonly ClientWebSocket socket;
-        private readonly string url;
-        private readonly CancellationToken cancellationToken;
+        private readonly ClientWebSocket _socket;
+        private readonly string _url;
+        private readonly CancellationToken _cancellationToken;
 
-        public SPCoinSocket(string url, CancellationToken cancellationToken)
+        public SpCoinSocket(string url, CancellationToken cancellationToken)
         {
-            socket = new ClientWebSocket();
-            this.url = url;
-            this.cancellationToken = cancellationToken;
+            _socket = new ClientWebSocket();
+            this._url = url;
+            this._cancellationToken = cancellationToken;
         }
 
-        public Task ConnectAsync() => socket.ConnectAsync(new Uri(url), cancellationToken);
+        public Task ConnectAsync()
+        {
+            return _socket.ConnectAsync(new Uri(_url), _cancellationToken);
+        }
 
-        public async Task<JObject> ReadJsonAsync()
-            => JObject.Parse(await ReadStringAsync(socket, cancellationToken));
+        private async Task<JObject> ReadJsonAsync()
+        {
+            return JObject.Parse(await ReadStringAsync(_socket, _cancellationToken));
+        }
 
         public async Task<T> ReadAsync<T>() where T : AbstractPacket
         {
@@ -91,7 +109,7 @@ public class SPCoinHandler : ISPCoinHandler
             var _type = json["type"]?.Value<string>();
             string _key;
 
-            if (json["data"] is JValue jvalue && jvalue?.Value<long>() is long _id)
+            if (json["data"] is JValue jValue && jValue?.Value<long>() is long _id)
             {
                 packet = (T)Activator.CreateInstance(typeof(T), _id, new JObject())!;
                 _key = packet.PacketType.GetKey();
@@ -105,9 +123,15 @@ public class SPCoinHandler : ISPCoinHandler
             return packet;
         }
         public Task WriteAsync<T>(T packet) where T : AbstractPacket
-            => WriteStringAsync(socket, packet.ToJson().ToString(Newtonsoft.Json.Formatting.None), cancellationToken);
+        {
+            return WriteStringAsync(_socket, packet.ToJson().ToString(Newtonsoft.Json.Formatting.None),
+                _cancellationToken);
+        }
 
-        public void Dispose() => socket.Dispose();
+        public void Dispose()
+        {
+            _socket.Dispose();
+        }
     }
 
     private static async Task<string> ReadStringAsync(WebSocket socket, CancellationToken cancellationToken)
@@ -126,5 +150,7 @@ public class SPCoinHandler : ISPCoinHandler
         return result.ToString();
     }
     private static Task WriteStringAsync(WebSocket socket, string data, CancellationToken cancellationToken)
-        => socket.SendAsync(Encoding.UTF8.GetBytes(data), WebSocketMessageType.Text, true, cancellationToken);
+    {
+        return socket.SendAsync(Encoding.UTF8.GetBytes(data), WebSocketMessageType.Text, true, cancellationToken);
+    }
 }

@@ -29,16 +29,30 @@ public enum PacketType
 }
 public static class PacketTypeExt
 {
-    public static string GetKey(this PacketType type) => type.ToString()[6..].ToLower();
-    public static SendType GetSendType(this PacketType type) => type.ToString().StartsWith("Client") ? SendType.Client : SendType.Server;
+    public static string GetKey(this PacketType type)
+    {
+        return type.ToString()[6..].ToLower();
+    }
+
+    public static SendType GetSendType(this PacketType type)
+    {
+        return type.ToString().StartsWith("Client") ? SendType.Client : SendType.Server;
+    }
 }
 public abstract class AbstractPacket
 {
     [JsonIgnore] public abstract PacketType PacketType { get; }
     [JsonIgnore] public long id;
 
-    public AbstractPacket(long id) => this.id = id;
-    public AbstractPacket(long id, JObject data) => this.id = id;
+    public AbstractPacket(long id)
+    {
+        this.id = id;
+    }
+
+    public AbstractPacket(long id, JObject data)
+    {
+        this.id = id;
+    }
 
     protected virtual JToken? ToJsonData()
     {

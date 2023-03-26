@@ -9,7 +9,10 @@ namespace SPCoinTest.Packets;
 
 public class ConfirmResponsePacket : AbstractPacket
 {
-    public override PacketType PacketType => PacketType.ServerConfirm;
+    public override PacketType PacketType
+    {
+        get { return PacketType.ServerConfirm; }
+    }
 
     public ConfirmResponsePacket(long id, JObject json) : base(id, json) { }
 }

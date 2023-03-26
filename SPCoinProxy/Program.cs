@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<ISPCoinHandler, SPCoinHandler>();
+builder.Services.AddTransient<ISPCoinHandler, SpCoinHandler>();
 builder.Services.AddScoped<IProxyContext, ProxyContext>();
 
 var app = builder.Build();

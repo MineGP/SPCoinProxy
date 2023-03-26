@@ -7,13 +7,18 @@ namespace SPCoinProxy.Controllers;
 public class ProxyController : ControllerBase
 {
     private readonly ISPCoinHandler handler;
-    public ProxyController(ISPCoinHandler handler) => this.handler = handler;
+    public ProxyController(ISPCoinHandler handler)
+    {
+        this.handler = handler;
+    }
 
     [HttpGet(Name = "balance/get")]
     public Task<int> Get(
         [FromQuery(Name = "uuid")] Guid uuid,
         CancellationToken cancellationToken)
-        => handler.GetUserBalance(uuid, cancellationToken);
+    {
+        return handler.GetUserBalance(uuid, cancellationToken);
+    }
 
     [HttpPost(Name = "balance/increase")]
     public Task<bool> Increase(
@@ -21,7 +26,9 @@ public class ProxyController : ControllerBase
         [FromQuery(Name = "reason")] string reason,
         [FromQuery(Name = "value")] int value,
         CancellationToken cancellationToken)
-        => handler.IncreaseUserBalance(uuid, reason, value, cancellationToken);
+    {
+        return handler.IncreaseUserBalance(uuid, reason, value, cancellationToken);
+    }
 
     [HttpPost(Name = "balance/decrease")]
     public Task<bool> Decrease(
@@ -29,5 +36,7 @@ public class ProxyController : ControllerBase
         [FromQuery(Name = "reason")] string reason,
         [FromQuery(Name = "value")] int value,
         CancellationToken cancellationToken)
-        => handler.DecreaseUserBalance(uuid, reason, value, cancellationToken);
+    {
+        return handler.DecreaseUserBalance(uuid, reason, value, cancellationToken);
+    }
 }
