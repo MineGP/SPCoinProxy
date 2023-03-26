@@ -38,6 +38,6 @@ jobs:
     - name: Build image
       run:  docker build -t $LOGIN/$NAME:${GITHUB_REF:11} -f ./SPCoinProxy/Dockerfile .
     - name: Push image to docker.io
-      run: docker push $LOGIN/$NAME
+      run: docker push $LOGIN/$NAME:${GITHUB_REF:11}
     - name: Send webhook for deploy
       run: "curl -X POST ${{ secrets.DEPLOYMENT_SERVER }} --header \"Authorization: ${{ secrets.DEPLOYMENT_TOKEN }}\""
