@@ -1,0 +1,341 @@
+{
+	"info": {
+		"_postman_id": "21df7052-7888-43df-ad54-44ec8d9d6937",
+		"name": "Swagger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "26591497-21df7052-7888-43df-ad54-44ec8d9d6937"
+	},
+	"item": [
+		{
+			"name": "proxy",
+			"item": [
+				{
+					"name": "balance",
+					"item": [
+						{
+							"name": "increase",
+							"item": [
+								{
+									"name": "/proxy/balance/increase",
+									"id": "27061953-5de6-48fa-b821-c7bf7d5d6ad9",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/proxy/balance/increase?uuid=<uuid>&reason=<string>&value=<integer>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"proxy",
+												"balance",
+												"increase"
+											],
+											"query": [
+												{
+													"key": "uuid",
+													"value": "<uuid>"
+												},
+												{
+													"key": "reason",
+													"value": "<string>"
+												},
+												{
+													"key": "value",
+													"value": "<integer>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "6ea606f5-09aa-411c-beaa-e14eaa32da4b",
+											"name": "Success",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/proxy/balance/increase?uuid=<uuid>&reason=<string>&value=<integer>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"proxy",
+														"balance",
+														"increase"
+													],
+													"query": [
+														{
+															"key": "uuid",
+															"value": "<uuid>"
+														},
+														{
+															"key": "reason",
+															"value": "<string>"
+														},
+														{
+															"key": "value",
+															"value": "<integer>"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "<boolean>"
+										}
+									]
+								}
+							],
+							"id": "b182f4ed-37c3-4501-9fe1-e2c64cb34c08"
+						},
+						{
+							"name": "get",
+							"item": [
+								{
+									"name": "/proxy/balance/get",
+									"id": "6d202d60-9383-438d-8a7b-69731a6d17b6",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/proxy/balance/get?uuid=ce6e763f-a669-40eb-866d-019e6ddca12c",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"proxy",
+												"balance",
+												"get"
+											],
+											"query": [
+												{
+													"key": "uuid",
+													"value": "ce6e763f-a669-40eb-866d-019e6ddca12c"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "0f77afdd-76be-4102-842b-a959c2822546",
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/proxy/balance/get?uuid=<uuid>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"proxy",
+														"balance",
+														"get"
+													],
+													"query": [
+														{
+															"key": "uuid",
+															"value": "<uuid>"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "<integer>"
+										}
+									]
+								}
+							],
+							"id": "87acc9c6-0b16-449a-8660-cc835fc60f3c"
+						},
+						{
+							"name": "decrease",
+							"item": [
+								{
+									"name": "/proxy/balance/decrease",
+									"id": "d0c1c889-7998-4538-b875-95f2ea0c325a",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/proxy/balance/decrease?uuid=<uuid>&reason=<string>&value=<integer>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"proxy",
+												"balance",
+												"decrease"
+											],
+											"query": [
+												{
+													"key": "uuid",
+													"value": "<uuid>"
+												},
+												{
+													"key": "reason",
+													"value": "<string>"
+												},
+												{
+													"key": "value",
+													"value": "<integer>"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"id": "de1e4870-434f-4aa5-a5d1-1c9296a46d5d",
+											"name": "Success",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/proxy/balance/decrease?uuid=<uuid>&reason=<string>&value=<integer>",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"proxy",
+														"balance",
+														"decrease"
+													],
+													"query": [
+														{
+															"key": "uuid",
+															"value": "<uuid>"
+														},
+														{
+															"key": "reason",
+															"value": "<string>"
+														},
+														{
+															"key": "value",
+															"value": "<integer>"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "<boolean>"
+										}
+									]
+								}
+							],
+							"id": "6a639567-346e-46a4-8eae-85c03891be23"
+						}
+					],
+					"id": "d2912882-2924-4699-8b2e-3f8b561dd981"
+				}
+			],
+			"id": "0b2d17d2-2e10-4754-a862-8c76887179dc"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "126eb285-9325-4bd8-9351-7277231e2ce9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "925d8dbb-e3b1-4773-942c-1797b9a23cef",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "69d62f3c-7b63-47ae-951f-2a265d55f723",
+			"key": "baseUrl",
+			"value": "/"
+		},
+		{
+			"id": "c6309f6f-adb4-44a2-88c8-3b434009fd16",
+			"key": "ws\n",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "a3ba5166-e8a5-4296-9fd2-05212590453a",
+			"key": "token\n",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
