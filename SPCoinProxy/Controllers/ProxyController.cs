@@ -12,7 +12,7 @@ public class ProxyController : ControllerBase
         this.handler = handler;
     }
 
-    [HttpGet(Name = "balance/get")]
+    [HttpGet("balance/get")]
     public Task<int> Get(
         [FromQuery(Name = "uuid")] Guid uuid,
         CancellationToken cancellationToken)
@@ -20,7 +20,7 @@ public class ProxyController : ControllerBase
         return handler.GetUserBalance(uuid, cancellationToken);
     }
 
-    [HttpPost(Name = "balance/increase")]
+    [HttpPost("balance/increase")]
     public Task<bool> Increase(
         [FromQuery(Name = "uuid")] Guid uuid,
         [FromQuery(Name = "reason")] string reason,
@@ -30,7 +30,7 @@ public class ProxyController : ControllerBase
         return handler.IncreaseUserBalance(uuid, reason, value, cancellationToken);
     }
 
-    [HttpPost(Name = "balance/decrease")]
+    [HttpPost("balance/decrease")]
     public Task<bool> Decrease(
         [FromQuery(Name = "uuid")] Guid uuid,
         [FromQuery(Name = "reason")] string reason,
